@@ -83,6 +83,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     private AutoCompleteTextView autoCompleteTextView;
     private LinearLayout searchLayout;
     private ImageView recenter;
+    private ImageView details;
 
     //Location Variable
     private Location location;
@@ -170,8 +171,13 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         searchLayout = findViewById(R.id.search_layout);
         searchLayout.setAlpha(0.65f);
 
-
-
+        details =findViewById(R.id.details);
+        details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),DetailsActivity.class));
+            }
+        });
         autoInit();
 
         recenter = findViewById(R.id.reset);
