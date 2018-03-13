@@ -1,9 +1,8 @@
 package com.prototype.hackathon.getparked;
 
 import android.Manifest;
-import android.app.Application;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Camera;
 import android.location.Location;
 import android.location.LocationListener;
 import android.support.annotation.NonNull;
@@ -11,8 +10,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 
@@ -21,7 +23,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -55,13 +56,14 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     private GoogleApiClient googleApiClient;
 
     //Display objects
+    private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private ActionBarDrawerToggle toggle;
 
     //Location Variable
     private Location location;
-    private LatLng latLng;
-    private Marker current;
+    private LatLng current;
     private Marker Dest;
     private List<Marker> markerList;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -69,6 +71,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     //Map elements
     private final float DEFAULT_ZOOM = 15.0f;
 
+    //Listener
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +85,18 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     }
 
     private void setUpDisplay() {
+        toolbar = findViewById(R.id.map_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         drawerLayout = findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
         navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -98,6 +110,15 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
             }
         } else
             ActivityCompat.requestPermissions(this, new String[]{FINE_LOCATION}, FINE_LOCATION_PERMISSION_REQUEST_CODE);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -136,14 +157,15 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                     public void onComplete(@NonNull Task<Location> task) {
                         if(task.isSuccessful()&&task.getResult()!=null){
                           location = task.getResult();
-                          latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                          moveCamera(latLng,DEFAULT_ZOOM);
+                          current = new LatLng(location.getLatitude(),location.getLongitude());
+                          moveCamera(current,DEFAULT_ZOOM);
                         }
                     }
                 });
             }
         }
     }
+
 
     private void moveCamera(LatLng latLng,float zoom){
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
@@ -182,6 +204,20 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch(id){
+            case R.id.nav_account :
+                startActivity(new Intent(getApplicationContext(),AccountActivity.class));
+                finish();
+                break;
+            case R.id.nav_settings :
+                startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
+
+                break;
+            case R.id.nav_logout :
+                startActivity(new Intent(getApplicationContext(),SignupActivity.class));
+                break;
+        }
         return false;
     }
 
@@ -221,7 +257,6 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
             } else {
                 getCurrentLocation();
                 mGoogleMap.setMyLocationEnabled(true);
-
             }
         }
     }
