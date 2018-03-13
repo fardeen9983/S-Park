@@ -23,9 +23,8 @@
         <activity
             android:name=".MapActivity"
             android:parentActivityName=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        </activity>
-        <activity android:name=".SplashActivity" >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,12 +32,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".SignupActivity"
-            android:parentActivityName=".LoginActivity"/>
-        <activity android:name=".AccountActivity"
-            android:parentActivityName=".MapActivity"/>
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MapActivity"></activity>
+        <activity
+            android:name=".SignupActivity"
+            android:parentActivityName=".LoginActivity" />
+        <activity
+            android:name=".AccountActivity"
+            android:parentActivityName=".MapActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MapActivity" />
+        <activity android:name=".DetailsActivity"></activity>
     </application>
 
 </manifest>

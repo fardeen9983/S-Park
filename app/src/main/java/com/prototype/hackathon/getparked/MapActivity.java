@@ -1,8 +1,11 @@
 package com.prototype.hackathon.getparked;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.media.Image;
@@ -16,28 +19,41 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -78,7 +94,43 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     //Map elements
     private final float DEFAULT_ZOOM = 15.0f;
 
+    //Places
+    private String placeID;
+    private PlaceAutocompleteAdapter placeAutocompleteAdapter;
+    private final LatLngBounds LATLNG_BOUNDS = new LatLngBounds(
+            new LatLng(-40, -168), new LatLng(71, 136));
+    private Place place;
+    private List<Address> addresses;
+    private AutocompletePrediction prediction;
+
     //Listener
+    private AdapterView.OnItemClickListener adapterClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            hideKeyboard();
+            prediction = placeAutocompleteAdapter.getItem(position);
+            placeID = prediction.getPlaceId();
+            PendingResult<PlaceBuffer> placeBufferPendingResult = Places.GeoDataApi.getPlaceById(googleApiClient, placeID);
+            placeBufferPendingResult.setResultCallback(placeBufferResultCallback);
+        }
+    };
+
+    private ResultCallback<PlaceBuffer> placeBufferResultCallback = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(@NonNull PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                Log.d(TAG, "Didn't get the places" + places.getStatus().toString());
+                places.release();
+                return;
+            }
+            place = places.get(0);
+            moveCamera(place.getLatLng(), DEFAULT_ZOOM, place.getName().toString());
+            places.release();
+        }
+    };
+    //Miscellaneous
+    private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +143,17 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         checkPermissions();
     }
 
+    private void hideKeyboard(){
+        InputMethodManager methodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (methodManager != null) {
+            methodManager.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
+        }
+    }
+
     private void setUpDisplay() {
+
+        markerList = new ArrayList<>();
+
         toolbar = findViewById(R.id.map_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -108,6 +170,20 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         searchLayout = findViewById(R.id.search_layout);
         searchLayout.setAlpha(0.65f);
 
+
+
+        autoInit();
+
+        recenter = findViewById(R.id.reset);
+        recenter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentLocation();
+            }
+        });
+    }
+
+    private void autoInit(){
         autoCompleteTextView = findViewById(R.id.search_auto);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -116,16 +192,49 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
             }
         });
 
-        recenter = findViewById(R.id.reset);
-        recenter.setOnClickListener(new View.OnClickListener() {
+        AutocompleteFilter filter = new AutocompleteFilter.Builder().setTypeFilter(Place.TYPE_COUNTRY).setCountry("IN").build();
+        placeAutocompleteAdapter = new PlaceAutocompleteAdapter(this, googleApiClient, LATLNG_BOUNDS, filter);
+        autoCompleteTextView.setOnItemClickListener(adapterClickListener);
+        autoCompleteTextView.setAdapter(placeAutocompleteAdapter);
+        autoCompleteTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                mGoogleMap.clear();
-                getCurrentLocation();
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE
+                        || actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == KeyEvent.ACTION_DOWN
+                        || actionId == KeyEvent.KEYCODE_ENTER) {
+                    hideKeyboard();
+                    moveToSearchedAddress(v.getText().toString());
+
+                }
+                return false;
             }
         });
     }
 
+    private void moveToSearchedAddress(String query) {
+        if (query == null)
+            return;
+        autoCompleteTextView.clearListSelection();
+        Geocoder geocoder = new Geocoder(this);
+        try {
+            addresses = geocoder.getFromLocationName(query, 5);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses.size() > 0) {
+            if (addresses.get(0) != null) {
+                Address address = addresses.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                moveCamera(latLng, DEFAULT_ZOOM, address.getAddressLine(0));
+            }
+        }
+
+    }
+    private void getDirections(){
+
+    }
     private void checkPermissions() {
         if (ActivityCompat.checkSelfPermission(this, FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.checkSelfPermission(this, COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -174,6 +283,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     private void getCurrentLocation() {
         if (locPermission) {
+            mGoogleMap.clear();
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 checkPermissions();
@@ -194,13 +304,13 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
 
     private void moveCamera(LatLng latLng,float zoom){
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
 
     private void moveCamera(LatLng latLng,float zoom,String desc){
         marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(desc));
         markerList.add(marker);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
 
 
