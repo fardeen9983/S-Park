@@ -3,6 +3,7 @@ package com.prototype.hackathon.getparked;
 import android.Manifest;
 import android.app.Application;
 import android.content.pm.PackageManager;
+import android.graphics.Camera;
 import android.location.Location;
 import android.location.LocationListener;
 import android.support.annotation.NonNull;
@@ -14,14 +15,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
@@ -50,9 +59,12 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     private NavigationView navigationView;
 
     //Location Variable
+    private Location location;
+    private LatLng latLng;
     private Marker current;
     private Marker Dest;
     private List<Marker> markerList;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     //Map elements
     private final float DEFAULT_ZOOM = 15.0f;
@@ -113,10 +125,34 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         mapFragment.getMapAsync(this);
     }
 
-    private void getCurrentLocation(){
-        if(locPermission){
-
+    private void getCurrentLocation() {
+        if (locPermission) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                checkPermissions();
+            } else {
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        if(task.isSuccessful()&&task.getResult()!=null){
+                          location = task.getResult();
+                          latLng = new LatLng(location.getLatitude(),location.getLongitude());
+                          moveCamera(latLng,DEFAULT_ZOOM);
+                        }
+                    }
+                });
+            }
         }
+    }
+
+    private void moveCamera(LatLng latLng,float zoom){
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+    }
+
+    private void moveCamera(LatLng latLng,float zoom,String desc){
+        marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(desc));
+        markerList.add(marker);
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
     }
 
     @Override
@@ -183,7 +219,9 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 checkPermissions();
             } else {
+                getCurrentLocation();
                 mGoogleMap.setMyLocationEnabled(true);
+
             }
         }
     }
