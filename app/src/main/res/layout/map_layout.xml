@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/map"
@@ -12,8 +12,56 @@
         tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
     <RelativeLayout
+        android:id="@+id/included_map_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <include layout="@layout/map_toolbar"/>
+
+        <include layout="@layout/map_toolbar" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/search_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="15dp" />
+
+    <LinearLayout
+
+        android:elevation="10dp"
+        android:id="@+id/search_layout"
+        android:layout_width="320dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/included_map_layout"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/search_background"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/ic_search_icon" />
+
+        <AutoCompleteTextView
+            android:id="@+id/search_auto"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 </RelativeLayout>
+
