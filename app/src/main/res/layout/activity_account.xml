@@ -1,173 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.prototype.hackathon.getparked.AccountActivity"
-    android:background="@color/light">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="205dp"
-        app:srcCompat="@drawable/user" />
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:textAlignment="center"
-        android:text="John" />
-
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="horizontal">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="25dp"
-        android:text="Profile"
-        android:paddingLeft="10dp"
-        android:background="#f8bbd0" />
-
-
-
-
-    </LinearLayout>
+    tools:context="com.prototype.hackathon.getparked.AccountActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
 
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/user" />
-
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="User Name" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/pen" />
-
-
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/mail" />
-
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Email" />
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/pen" />
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:text="Car details"
-            android:paddingLeft="10dp"
-            android:background="#f8bbd0" />
+            android:layout_marginVertical="10dp"
+            app:cardCornerRadius="12dp">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="205dp"
+                    app:srcCompat="@drawable/user" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/imageView"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:text="John"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/car" />
-
-        <EditText
-            android:layout_width="300dp"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Car Number" />
+            android:layout_marginVertical="10dp"
+            app:cardCornerRadius="12dp">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/pen" />
+            <RelativeLayout
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linlay1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f8bbd0"
+                        android:paddingLeft="10dp"
+                        android:text="Profile"
+                        android:textSize="25dp" />
 
 
+                </LinearLayout>
 
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <LinearLayout
+                    android:id="@+id/linlay2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/linlay1"
+                    android:orientation="horizontal">
 
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/car" />
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/user" />
 
-        <EditText
-            android:layout_width="300dp"
+                    <EditText
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:text="User Name"
+                        android:textSize="20dp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/pen" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/linlay2"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/mail" />
+
+                    <EditText
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:textSize="20dp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/pen" />
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            app:cardCornerRadius="12dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Model" />
+            android:layout_marginVertical="10dp">
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/pen" />
+            <RelativeLayout
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/linlay3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f8bbd0"
+                        android:paddingLeft="10dp"
+                        android:text="Car details"
+                        android:textSize="25dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linlay4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/linlay3"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/car" />
+
+                    <EditText
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:text="Car Number"
+                        android:textSize="20dp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/pen" />
 
 
+                </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/linlay4"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/car" />
+
+                    <EditText
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:text="Model"
+                        android:textSize="20dp" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/pen" />
+
+
+                </LinearLayout>
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
