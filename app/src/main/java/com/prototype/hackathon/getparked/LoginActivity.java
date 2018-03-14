@@ -16,7 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity {
 
     private EditText Email;
     private EditText Password;
@@ -36,6 +36,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         RegisterUser = findViewById(R.id.registerView);
         Login = findViewById(R.id.loginButton);
 
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser()!=null)
+                    startActivity(new Intent(getApplicationContext(),MapActivity.class));
+            }
+        };
         firebaseAuth = FirebaseAuth.getInstance();
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,13 +92,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onClick(View view) {
-        if(view == Login){
-            loginUser();
-        }
-        if(view == RegisterUser){
-            startActivity(new Intent(LoginActivity.this,SignupActivity.class));
-        }
-
+    protected void onStart() {
+        super.onStart();
+    firebaseAuth.addAuthStateListener(authStateListener);
     }
 }

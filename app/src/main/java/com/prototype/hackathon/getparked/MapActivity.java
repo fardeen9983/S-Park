@@ -31,15 +31,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.PlaceDetectionApi;
+import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -51,6 +56,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,8 +64,12 @@ import java.util.List;
 
 
 public class MapActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
-        , OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+        , OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, LocationListener
+        , GoogleApiClient.ConnectionCallbacks ,GoogleApiClient.OnConnectionFailedListener{
 
+
+    //Firebase
+    private FirebaseAuth auth;
 
     //Permissions
     private final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -86,11 +96,20 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     private ImageView details;
 
     //Location Variable
-    private Location location;
+    private double radius;
+    public static Location location;
     private LatLng current;
     private Marker Dest;
     private List<Marker> markerList;
     private FusedLocationProviderClient fusedLocationProviderClient;
+
+    //Location requests
+    private LocationRequest locationRequest;
+    private int locPriority;
+    private final int PRIORITY_BALANCED_POWER_ACCURACY = 2;
+    private final int PRIORITY_HIGH_ACCURACY = 3;
+    private final int PRIORITY_LOW_POWER = 1;
+    private final int PRIORITY_NO_POWER = 0;
 
     //Map elements
     private final float DEFAULT_ZOOM = 15.0f;
@@ -137,10 +156,12 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        googleApiClient = new GoogleApiClient.Builder(this).addApi(Places.GEO_DATA_API)
+        googleApiClient = new GoogleApiClient.Builder(this).addApi(Places.GEO_DATA_API).addApi(LocationServices.API)
                 .addApi(Places.PLACE_DETECTION_API).build();
         locPermission = false;
+        radius=10;
         setUpDisplay();
+        locPriority = PRIORITY_BALANCED_POWER_ACCURACY;
         checkPermissions();
     }
 
@@ -333,7 +354,11 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
                 break;
             case R.id.nav_logout :
-                startActivity(new Intent(getApplicationContext(),SignupActivity.class));
+                auth = FirebaseAuth.getInstance();
+                if(auth.getCurrentUser()!=null) {
+                    auth.signOut();
+                }
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
                 break;
         }
         return false;
@@ -355,7 +380,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         if (mGoogleMap == null) {
             mGoogleMap = googleMap;
         }
-        mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
+        mGoogleMap.getUiSettings().setMapToolbarEnabled(true);
         mGoogleMap.getUiSettings().setRotateGesturesEnabled(false);
         mGoogleMap.getUiSettings().setCompassEnabled(false);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -368,5 +393,47 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                 mGoogleMap.setMyLocationEnabled(true);
             }
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        locationRequest  = LocationRequest.create();
+        locationRequest.setPriority(locPriority);
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    private void createLocationRequest(){
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
