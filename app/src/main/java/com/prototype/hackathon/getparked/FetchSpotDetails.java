@@ -50,7 +50,11 @@ public class FetchSpotDetails {
                     break;
                 else {
                     JSONObject loc = rajkot.optJSONObject("loc"+i);
-                    spotDetails.add(new SpotDetails());
+                    SpotDetails spotDetail = new SpotDetails();
+                    spotDetail.setLatitude(loc.optDouble("lat"));
+                    spotDetail.setLongitude(loc.optDouble("long"));
+                    spotDetail.setAddress(loc.optString("name"));
+
                 }
             }
         } catch (JSONException e) {

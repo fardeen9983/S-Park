@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -113,7 +114,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     //Map elements
     private final float DEFAULT_ZOOM = 15.0f;
-
+    private ArrayList<SpotDetails> spotDetailsList;
     //Places
     private String placeID;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
@@ -156,6 +157,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        spotDetailsList = (ArrayList<SpotDetails>)getIntent().getSerializableExtra("spot");
         googleApiClient = new GoogleApiClient.Builder(this).addApi(Places.GEO_DATA_API).addApi(LocationServices.API)
                 .addApi(Places.PLACE_DETECTION_API).build();
         locPermission = false;
@@ -199,6 +201,14 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                 startActivity(new Intent(getApplicationContext(),DetailsActivity.class));
             }
         });
+
+        if(spotDetailsList!=null){
+            for(SpotDetails spotDetails : spotDetailsList){
+                LatLng latLng= new LatLng(spotDetails.getLatitude(),spotDetails.getLongitude());
+                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(spotDetails.getAddress()));
+                markerList.add(marker);
+            }
+        }
         autoInit();
 
         recenter = findViewById(R.id.reset);
@@ -208,6 +218,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                 getCurrentLocation();
             }
         });
+
     }
 
     private void autoInit(){

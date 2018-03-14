@@ -1,12 +1,14 @@
 package com.prototype.hackathon.getparked;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by LUCIFER on 13-03-2018.
  */
 
-public class SpotDetails {
+public class SpotDetails implements Serializable{
     private double latitude;
     private double longitude;
     private int sensorCount;
@@ -14,7 +16,7 @@ public class SpotDetails {
     private int free;
     private int used;
     private double cost;
-    private List<Boolean> sensors;
+    private ArrayList<Boolean> sensors;
     public SpotDetails(double latitude, double longitude, int sensorCount, String address, int free, int used, double cost) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -72,11 +74,20 @@ public class SpotDetails {
         this.address = address;
     }
 
-    public void setSensors(List<Boolean> sensors) {
+    public void setSensors(ArrayList<Boolean> sensors) {
         this.sensors = sensors;
     }
 
-    public List<Boolean> getSensors() {
+    @Override
+    public String toString() {
+        String y = "Name : " + address + ", Lat :  " + latitude + ", Long : " + longitude + " ";
+        for(Boolean x : sensors){
+            y+=" " +x;
+        }
+        return y;
+    }
+
+    public ArrayList<Boolean> getSensors() {
 
         return sensors;
     }
