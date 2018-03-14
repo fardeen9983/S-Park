@@ -8,10 +8,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -26,7 +24,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -37,15 +34,12 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.PlaceDetectionApi;
-import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -114,7 +108,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     //Map elements
     private final float DEFAULT_ZOOM = 15.0f;
-    private ArrayList<SpotDetails> spotDetailsList;
+    public static SpotDetailsList spotDetailsList;
     //Places
     private String placeID;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
@@ -151,14 +145,13 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         }
     };
     //Miscellaneous
-    private DetailsActivity detailsActivity;
+    private Details markerDetails;
     private final String TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        spotDetailsList = (ArrayList<SpotDetails>)getIntent().getSerializableExtra("spot");
         googleApiClient = new GoogleApiClient.Builder(this).addApi(Places.GEO_DATA_API).addApi(LocationServices.API)
                 .addApi(Places.PLACE_DETECTION_API).build();
         locPermission = false;
@@ -196,12 +189,14 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         searchLayout.setAlpha(0.65f);
 
         details =findViewById(R.id.details);
-//        details.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(),DetailsActivity.class));
-//            }
-//        });
+        details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),DetailsActivity.class);
+                intent.putExtra("spot",spotDetailsList);
+                startActivity(intent);
+            }
+        });
 
         if(spotDetailsList!=null){
             for(SpotDetails spotDetails : spotDetailsList){
@@ -333,8 +328,8 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                         if(task.isSuccessful()&&task.getResult()!=null){
                           location = task.getResult();
                           current = new LatLng(location.getLatitude(),location.getLongitude());
-                          detailsActivity = new DetailsActivity(mGoogleMap,getApplicationContext(),location,radius);
-                          detailsActivity.onCreate();
+                          markerDetails = new Details(mGoogleMap,getApplicationContext(),location,radius);
+                          markerDetails.onCreate();
                           moveCamera(current,DEFAULT_ZOOM);
                         }
                     }
@@ -386,8 +381,8 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-
-        return false;
+        startActivity(new Intent(getApplicationContext(),DetailsActivity.class));
+        return true;
     }
 
     @Override

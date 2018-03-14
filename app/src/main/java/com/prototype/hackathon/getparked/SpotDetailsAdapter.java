@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -15,17 +16,26 @@ import java.util.List;
  */
 
 public class SpotDetailsAdapter extends ArrayAdapter<SpotDetails> {
-   public SpotDetailsAdapter(Context context,List<SpotDetails> spotDetailsList){
-       super(context,0,spotDetailsList);
-   }
+    private SpotDetailsList spotDetailsList;
+
+    public SpotDetailsAdapter(Context context, SpotDetailsList spotDetailsList) {
+        super(context, 0, spotDetailsList);
+        this.spotDetailsList = spotDetailsList;
+    }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View root = convertView;
-        if(root==null){
-            root = LayoutInflater.from(getContext()).inflate(R.layout.details_view,parent,false);
+        if (root == null) {
+            root = LayoutInflater.from(getContext()).inflate(R.layout.details_view, parent, false);
         }
+        TextView address = root.findViewById(R.id.text2);
+        TextView timer = root.findViewById(R.id.timer);
+        TextView counter = root.findViewById(R.id.counter);
+        SpotDetails spotDetails = spotDetailsList.get(position);
+
+        address.setText(spotDetails.getAddress());
 
         return root;
     }
