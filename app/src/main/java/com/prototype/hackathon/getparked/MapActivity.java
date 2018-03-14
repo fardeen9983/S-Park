@@ -151,6 +151,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         }
     };
     //Miscellaneous
+    private DetailsActivity detailsActivity;
     private final String TAG = getClass().getSimpleName();
 
     @Override
@@ -195,12 +196,12 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         searchLayout.setAlpha(0.65f);
 
         details =findViewById(R.id.details);
-        details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),DetailsActivity.class));
-            }
-        });
+//        details.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getApplicationContext(),DetailsActivity.class));
+//            }
+//        });
 
         if(spotDetailsList!=null){
             for(SpotDetails spotDetails : spotDetailsList){
@@ -332,6 +333,8 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                         if(task.isSuccessful()&&task.getResult()!=null){
                           location = task.getResult();
                           current = new LatLng(location.getLatitude(),location.getLongitude());
+                          detailsActivity = new DetailsActivity(mGoogleMap,getApplicationContext(),location,radius);
+                          detailsActivity.onCreate();
                           moveCamera(current,DEFAULT_ZOOM);
                         }
                     }
@@ -383,6 +386,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
         return false;
     }
 
@@ -419,9 +423,6 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     }
 
-    private void createLocationRequest(){
-
-    }
 
     @Override
     public void onProviderEnabled(String provider) {

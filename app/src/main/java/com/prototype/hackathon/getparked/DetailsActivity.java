@@ -2,6 +2,8 @@ package com.prototype.hackathon.getparked;
 
 import android.app.LoaderManager;
 import android.content.AsyncTaskLoader;
+import android.content.ContentProvider;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.location.Address;
@@ -11,9 +13,16 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,19 +38,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class DetailsActivity extends AppCompatActivity  {
+public class DetailsActivity   {
 
+    private double radius;
     private String state;
     private String city;
     private Address address;
+    private GoogleMap mGoogleMap;
     private ArrayList<Address> addresses;
     private ListView listView;
     public static SpotDetailsList spotDetailsList;
     private SpotDetails spotDetails;
     private DatabaseReference databaseReference;
-    public static void calc(){
-
-    }
     private SpotDetailsAdapter spotDetailsArrayAdapter;
     private Location current;
     private final String MANAGER = "manager";
@@ -49,21 +57,25 @@ public class DetailsActivity extends AppCompatActivity  {
     private Iterable<DataSnapshot> dataSnapshots;
     private ArrayList<Long> valueCount = new ArrayList<>();
     private long locCount;
+
+    private Context context;
     private final String query = "https://get-parked-hackathon-2k18.firebaseio.com/.json?print=pretty&format=export&auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MjA5NzY4ODEsImV4cCI6MTUyMDk4MDQ4MSwidiI6MCwiYWRtaW4iOnRydWV9.XXYoMweAkrrsMge3FDjtONltFZyHIp4iJdjw-ZBUxrk";
+    private View root;
+    public DetailsActivity(GoogleMap googleMap, Context context,Location current,double radius) {
+        this.mGoogleMap =googleMap;
+        this.context = context;
+        this.current = current;
+        this.radius = radius;
+    }
+    public void onCreate() {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
-
+       // root = LayoutInflater.from(context).inflate(R.layout.activity_details,)
         //getLoaderManager().initLoader(1,null,this);
-        current = MapActivity.location;
-        listView = findViewById(R.id.details_list);
+
+        //listView = findViewById(R.id.details_list);
         spotDetailsList = new SpotDetailsList();
         //getAddress();
         databaseReference = FirebaseDatabase.getInstance().getReference().child(MANAGER).child("gujarat").child("rajkot");
-
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -143,18 +155,20 @@ public class DetailsActivity extends AppCompatActivity  {
             super.onPostExecute(spotDetails);
             List<String> name = new ArrayList<>();
             for(SpotDetails details : spotDetails){
-                name.add(details.getAddress());
+
+                LatLng latLng = new LatLng(details.getLatitude(),details.getLongitude());
+                if(checkRadius(latLng))
+                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(details.getAddress()));
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,name);
-            listView.setAdapter(adapter);
+
+//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1,name);
+//            listView.setAdapter(adapter);
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("spot",spotDetailsList);
-        startActivity(new Intent(getApplicationContext(),MapActivity.class),bundle);
+    private boolean checkRadius(LatLng latLng){
+        float []results ={};
+        //Location.distanceBetween(current.getLatitude(),current.getLongitude(),latLng.latitude,latLng.longitude,results);
+        Log.v(TAG,results.toString()+" sadfsadfsdf");
+        return true;
     }
 }
