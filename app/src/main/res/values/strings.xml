@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Get Parked</string>
+    <string name="app_name">S-Park</string>
     <string name="google_maps_key">AIzaSyDUvGokd_c0QDLCUkCsAgae9AzqbTdxiJE</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>

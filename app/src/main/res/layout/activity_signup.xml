@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context="com.prototype.hackathon.getparked.SignupActivity">
 
     <TextView
@@ -20,12 +21,7 @@
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="#03A9F4"
-        android:textSize="55sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        android:textSize="55sp"/>
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -38,13 +34,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress|textPersonName"
-        android:textColorHint="#03A9F4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.186" />
+        android:textColorHint="#03A9F4" />
 
     <EditText
         android:id="@+id/textPassword"
@@ -57,13 +47,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:textColorHint="#03A9F4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.313" />
+        android:textColorHint="#03A9F4" />
 
     <Button
         android:id="@+id/buttonRegister"
@@ -74,12 +58,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="REGISTER"
-        android:textColor="#03A9F4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textPassword"
-        app:layout_constraintVertical_bias="0.729" />
+        android:textColor="#03A9F4" />
 
     <TextView
         android:id="@+id/textViewSignin"
@@ -90,12 +69,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="LOGIN USER"
-        android:textColor="#03A9F4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.603" />
+        android:textColor="#03A9F4" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

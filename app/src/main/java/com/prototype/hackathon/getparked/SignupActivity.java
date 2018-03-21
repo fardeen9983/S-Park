@@ -34,10 +34,10 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
-        buttonRegister = (Button) findViewById(R.id.buttonRegister);
-        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-        editTextPassword = (EditText) findViewById(R.id.textPassword);
-        textViewSignin = (TextView) findViewById(R.id.textViewSignin);
+        buttonRegister =  findViewById(R.id.buttonRegister);
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.textPassword);
+        textViewSignin = findViewById(R.id.textViewSignin);
         buttonRegister.setOnClickListener(this);
         textViewSignin.setOnClickListener(this);
 
@@ -48,11 +48,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
         String password = editTextPassword.getText().toString().trim();
 
         if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Enter Email",Toast.LENGTH_SHORT).show();
+            editTextEmail.setError("Enter valid email address");
             return;
         }
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Enter Password",Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(password)){
+            editTextPassword.setError("Enter valid password");
             return;
         }
 

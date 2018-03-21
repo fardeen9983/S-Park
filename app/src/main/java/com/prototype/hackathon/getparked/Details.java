@@ -154,10 +154,8 @@ public class Details {
         @Override
         protected void onPostExecute(SpotDetailsList spotDetails) {
             super.onPostExecute(spotDetails);
-            MapActivity.spotDetailsList = spotDetails;
             List<String> name = new ArrayList<>();
             for(SpotDetails details : spotDetails){
-
                 LatLng latLng = new LatLng(details.getLatitude(),details.getLongitude());
                 if(checkRadius(latLng))
                 mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(details.getAddress()));

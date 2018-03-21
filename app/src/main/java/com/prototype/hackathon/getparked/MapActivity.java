@@ -59,8 +59,7 @@ import java.util.List;
 
 
 public class MapActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
-        , OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, LocationListener
-        , GoogleApiClient.ConnectionCallbacks ,GoogleApiClient.OnConnectionFailedListener{
+        , OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks ,GoogleApiClient.OnConnectionFailedListener{
 
 
     //Firebase
@@ -108,7 +107,6 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     //Map elements
     private final float DEFAULT_ZOOM = 15.0f;
-    public static SpotDetailsList spotDetailsList;
     //Places
     private String placeID;
     private PlaceAutocompleteAdapter placeAutocompleteAdapter;
@@ -193,18 +191,10 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),DetailsActivity.class);
-                intent.putExtra("spot",spotDetailsList);
                 startActivity(intent);
             }
         });
 
-        if(spotDetailsList!=null){
-            for(SpotDetails spotDetails : spotDetailsList){
-                LatLng latLng= new LatLng(spotDetails.getLatitude(),spotDetails.getLongitude());
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(spotDetails.getAddress()));
-                markerList.add(marker);
-            }
-        }
         autoInit();
 
         recenter = findViewById(R.id.reset);
@@ -328,8 +318,6 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                         if(task.isSuccessful()&&task.getResult()!=null){
                           location = task.getResult();
                           current = new LatLng(location.getLatitude(),location.getLongitude());
-                          markerDetails = new Details(mGoogleMap,getApplicationContext(),location,radius);
-                          markerDetails.onCreate();
                           moveCamera(current,DEFAULT_ZOOM);
                         }
                     }
@@ -405,29 +393,6 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        locationRequest  = LocationRequest.create();
-        locationRequest.setPriority(locPriority);
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {

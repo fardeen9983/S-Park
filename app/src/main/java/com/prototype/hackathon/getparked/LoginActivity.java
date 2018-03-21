@@ -63,11 +63,11 @@ public class LoginActivity extends AppCompatActivity {
         String password = Password.getText().toString().trim();
 
         if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Enter Email",Toast.LENGTH_SHORT).show();
+            Email.setError("Enter valid email address");
             return;
         }
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(this,"Enter Password",Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(password)){
+            Password.setError("Enter valid password");
             return;
         }
 

@@ -21,9 +21,5 @@ public class DetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         listView = findViewById(R.id.details_list);
-        spotDetailsList = (SpotDetailsList)intent.getSerializableExtra("spot");
-        spotDetailsAdapter = new SpotDetailsAdapter(this,spotDetailsList);
-        listView.setAdapter(spotDetailsAdapter);
-
     }
 }
