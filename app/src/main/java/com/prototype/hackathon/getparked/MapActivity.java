@@ -91,7 +91,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     //Location Variable
     private double radius;
-    public static Location location;
+    public  Location location;
     private LatLng current;
     private Marker Dest;
     private List<Marker> markerList;
@@ -369,8 +369,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        startActivity(new Intent(getApplicationContext(),DetailsActivity.class));
-        return true;
+        return false;
     }
 
     @Override
