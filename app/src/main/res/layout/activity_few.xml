@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="12dp"
     android:background="#58595b">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="#58595b">
+
         <CustomViews.SegoePrintTextView
             android:id="@+id/parkingSpaces"
             android:layout_width="match_parent"
@@ -33,6 +38,7 @@
             android:gravity="center"
             android:textSize="20sp"
             android:lines="3"
+            android:textColor="@color/white"
             android:padding="12dp"
             android:text="Address of parking places shown above"
             android:textAlignment="center"
@@ -41,22 +47,21 @@
             app:layout_constraintRight_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/parkingSpaces" />
 
-            <CustomViews.SegoePrintTextView
-                android:id="@+id/costView"
-                app:layout_constraintRight_toLeftOf="@+id/RdisplayView"
-                app:layout_constraintLeft_toRightOf="@id/rupeeView"
-                app:layout_constraintBottom_toTopOf="@+id/distanceView"
-                app:layout_constraintTop_toBottomOf="@+id/addressView"
-                android:gravity="center"
-                android:layout_width="215dp"
-                android:layout_height="30dp"
-                android:background="#58595b"
-                android:text="Cost"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textStyle="italic"
-                tools:layout_editor_absoluteX="86dp"
-                tools:layout_editor_absoluteY="80dp" />
+        <CustomViews.SegoePrintTextView
+            android:id="@+id/costView"
+            android:layout_width="215dp"
+            android:layout_height="33dp"
+            android:background="#58595b"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="Cost"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/distanceView"
+            app:layout_constraintLeft_toRightOf="@id/rupeeView"
+            app:layout_constraintRight_toLeftOf="@+id/RdisplayView"
+            app:layout_constraintTop_toBottomOf="@+id/addressView" />
 
         <CustomViews.SegoePrintTextView
             android:id="@+id/distanceView"
@@ -64,6 +69,7 @@
             android:layout_height="30dp"
             android:background="#58595b"
             android:gravity="center"
+            android:textColor="@color/white"
             android:text="Distance"
             android:textAlignment="center"
             android:textStyle="italic"
@@ -88,6 +94,7 @@
                 android:layout_width="102dp"
                 android:layout_height="32dp"
                 android:background="#58595b"
+                android:textColor="@color/white"
                 android:text="Rs 50/Hr"
                 app:layout_constraintRight_toLeftOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/costView"
@@ -101,6 +108,7 @@
                 android:layout_height="27dp"
                 android:background="#58595b"
                 android:text="10 kms"
+                android:textColor="@color/white"
                 app:layout_constraintRight_toLeftOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/distanceView"
                 app:layout_constraintBottom_toTopOf="@+id/image"
@@ -126,6 +134,5 @@
                 app:layout_constraintBottom_toTopOf="@+id/photoView"
                 app:layout_constraintTop_toBottomOf="@+id/distanceView"
                 android:layout_height="1dp" />
-
     </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</android.support.v7.widget.CardView>

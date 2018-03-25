@@ -30,23 +30,23 @@ public class ParkingSpotAdapter extends ArrayAdapter<ParkingSpot> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View root = convertView;
         if (root == null) {
-            root = LayoutInflater.from(getContext()).inflate(R.layout.details_view, parent, false);
+            root = LayoutInflater.from(getContext()).inflate(R.layout.activity_few, parent, false);
         }
-        TextView address = root.findViewById(R.id.text2);
-        TextView timer = root.findViewById(R.id.timer);
-        TextView cost = root.findViewById(R.id.cost);
+        TextView address = root.findViewById(R.id.addressView);
+        TextView name = root.findViewById(R.id.parkingSpaces);
+        TextView distance = root.findViewById(R.id.DdisplayView);
+        TextView cost = root.findViewById(R.id.RdisplayView);
         spot = getItem(position);
-//        if (spot.getAddress() == "" || spot.getAddress() == null)
-//            address.setText(spot.getName());
-//        else
-        address.setText(spot.getName());
-        HashMap<Integer, Sensor> map = spot.getSensor();
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < map.size(); i++) {
-            sensor = map.get(i + 1);
-            builder.append("\n" + sensor.toString(i + 1));
-        }
-        timer.setText(builder.toString());
+       if (!(spot.getAddress() == "" || spot.getAddress() == null))
+              address.setText(spot.getAddress());
+        name.setText(spot.getName());
+//        HashMap<Integer, Sensor> map = spot.getSensor();
+//        StringBuilder builder = new StringBuilder();
+//        for (int i = 0; i < map.size(); i++) {
+//            sensor = map.get(i + 1);
+//            builder.append("\n" + sensor.toString(i + 1));
+//        }
+        distance.setText("dfsdf");
         cost.setText(spot.getCost() + "");
         return root;
 
