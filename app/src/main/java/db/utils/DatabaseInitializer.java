@@ -33,35 +33,39 @@ public class DatabaseInitializer {
     }
 
     private static Searched addSearched(final AppDatabase db, final int id,
-                                        final String locName, final int pincode, final LatLng coordinates) {
+                                        final String locName, final int pincode, final double lat,final double lng) {
         Searched searched = new Searched();
         searched.id = id;
         searched.locName = locName;
         searched.pincode = pincode;
-        searched.coordinates = coordinates;
+        searched.lat = lat;
+        searched.lng = lng;
         db.searchedModel().insertSearched(searched);
         return searched;
     }
 
     private static Favourites addFavourites(final AppDatabase db, final int id,
-                                            final String locName, final int pincode, final LatLng coordinates) {
+                                            final String locName, final int pincode,
+                                            final double lat,final double lng) {
         Favourites favourites = new Favourites();
         favourites.id = id;
         favourites.locName = locName;
         favourites.pincode = pincode;
-        favourites.coordinates = coordinates;
+        favourites.lat = lat;
+        favourites.lng = lng;
         db.favouritesModel().insertFavourites(favourites);
         return  favourites;
     }
 
     private static Visited addVisited(final AppDatabase db, final int id,
-                                      final String locName, final int pincode, final LatLng coordinates,
+                                      final String locName, final int pincode, final double lat,final double lng,
                                       final double cost, final long duration, final Date date) {
         Visited visited = new Visited();
         visited.id = id;
         visited.locName = locName;
         visited.pincode = pincode;
-        visited.coordinates = coordinates;
+        visited.lat = lat;
+        visited.lng = lng;
         visited.cost = cost;
         visited.duration = duration;
         visited.date = date;
@@ -77,18 +81,14 @@ public class DatabaseInitializer {
 
         Date date = new Date();
         date.setTime(38383838);
-        Searched searched = addSearched(db,1,"VVN",388120,new LatLng(27.8838,24.4234));
-        Favourites favourites = addFavourites(db, 1, "anand", 370001, new LatLng(67.93,63.90));
-        Visited visited = addVisited(db,1,"VVN",380020,new LatLng(34.9986,56.998),65,35353,date);
+        Searched searched = addSearched(db,1,"VVN",388120,27.8838,24.4234);
+        Favourites favourites = addFavourites(db, 1, "anand", 370001, 67.93,63.90);
+        Visited visited = addVisited(db,1,"VVN",380020,34.9986,56.998,65,35353,date);
 
 
     }
 
-    private static Date getTodayPlusDays(int daysAgo) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, daysAgo);
-        return calendar.getTime();
-    }
+
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 

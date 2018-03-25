@@ -15,7 +15,7 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
  */
 
 @Dao
-@TypeConverters({DateConverter.class,LatlngConverter.class})
+@TypeConverters(DateConverter.class)
 public interface VisitedDao {
 
     @Query("SELECT * FROM Visited")

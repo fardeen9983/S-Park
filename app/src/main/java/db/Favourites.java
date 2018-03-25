@@ -25,5 +25,8 @@ public class Favourites {
     public int pincode;
 
     @NonNull
-    public LatLng coordinates;
+    public double lat;
+
+    @NonNull
+    public  double lng;
 }

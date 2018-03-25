@@ -15,7 +15,6 @@ import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
  */
 
 @Dao
-@TypeConverters(LatlngConverter.class)
 public interface FavouritesDao {
 
     @Query("SELECT * FROM Favourites")

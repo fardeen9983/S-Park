@@ -152,7 +152,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     };
     //Miscellaneous
     private final int ERROR_SERVICES = 9001;
-    private Details markerDetails;
+
     private final String TAG = getClass().getSimpleName();
 
     @Override

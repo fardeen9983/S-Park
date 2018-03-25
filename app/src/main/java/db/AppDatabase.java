@@ -11,7 +11,7 @@ import android.content.Context;
  */
 
 @Database(entities = {Searched.class, Favourites.class, Visited.class}, version = 1,exportSchema = false)
-@TypeConverters({DateConverter.class, LatlngConverter.class})
+@TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

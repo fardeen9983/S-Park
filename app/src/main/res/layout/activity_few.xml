@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#58595b">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <CustomViews.SegoePrintTextView
+            android:id="@+id/parkingSpaces"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:text="Name of available parking spaces"
+            android:textColor="#000000"
+            android:textSize="25sp"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/addressView"
+            app:layout_constraintTop_toBottomOf="parent" />
+
+        <CustomViews.SegoePrintTextView
+            android:id="@+id/addressView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="4dp"
+            android:background="#58595b"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:lines="3"
+            android:padding="12dp"
+            android:text="Address of parking places shown above"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/costView"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/parkingSpaces" />
+
+            <CustomViews.SegoePrintTextView
+                android:id="@+id/costView"
+                app:layout_constraintRight_toLeftOf="@+id/RdisplayView"
+                app:layout_constraintLeft_toRightOf="@id/rupeeView"
+                app:layout_constraintBottom_toTopOf="@+id/distanceView"
+                app:layout_constraintTop_toBottomOf="@+id/addressView"
+                android:gravity="center"
+                android:layout_width="215dp"
+                android:layout_height="30dp"
+                android:background="#58595b"
+                android:text="Cost"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textStyle="italic"
+                tools:layout_editor_absoluteX="86dp"
+                tools:layout_editor_absoluteY="80dp" />
+
+        <CustomViews.SegoePrintTextView
+            android:id="@+id/distanceView"
+            android:layout_width="215dp"
+            android:layout_height="30dp"
+            android:background="#58595b"
+            android:gravity="center"
+            android:text="Distance"
+            android:textAlignment="center"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/image"
+            app:layout_constraintLeft_toRightOf="@id/locationView"
+            app:layout_constraintRight_toLeftOf="@id/DdisplayView"
+            app:layout_constraintTop_toBottomOf="@+id/costView" />
+
+            <ImageView
+                android:id="@+id/rupeeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_cost"
+                app:layout_constraintRight_toLeftOf="@id/costView"
+                app:layout_constraintLeft_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/locationView"
+                app:layout_constraintTop_toBottomOf="@id/addressView" />
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/RdisplayView"
+                android:layout_width="102dp"
+                android:layout_height="32dp"
+                android:background="#58595b"
+                android:text="Rs 50/Hr"
+                app:layout_constraintRight_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/costView"
+                app:layout_constraintBottom_toTopOf="@+id/DdisplayView"
+                app:layout_constraintTop_toBottomOf="@+id/addressView" />
+
+            <TextView
+                android:id="@+id/DdisplayView"
+                android:gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="27dp"
+                android:background="#58595b"
+                android:text="10 kms"
+                app:layout_constraintRight_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/distanceView"
+                app:layout_constraintBottom_toTopOf="@+id/image"
+                app:layout_constraintTop_toBottomOf="@+id/RdisplayView" />
+
+            <ImageView
+                android:id="@+id/locationView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_distance"
+                app:layout_constraintRight_toLeftOf="@id/distanceView"
+                app:layout_constraintLeft_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/image"
+                app:layout_constraintTop_toBottomOf="@+id/rupeeView" />
+
+            <TextView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:text="IMAGE"
+                android:textColor="#000000"
+                android:gravity="center"
+                app:layout_constraintRight_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/photoView"
+                app:layout_constraintTop_toBottomOf="@+id/distanceView" />
+
+        <ImageView
+            android:id="@+id/photoView"
+            android:layout_width="407dp"
+            android:layout_height="252dp"
+            android:background="#EEEEEE"
+            android:src="@drawable/back_circle"
+            app:layout_constraintBottom_toTopOf="@+id/buttonWed"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image" />
+
+        <TextView
+            android:id="@+id/counter"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:gravity="center"
+            android:text="50"
+            android:textColor="#ffffff"
+            android:textSize="70sp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonWed"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/distanceView"
+            app:layout_constraintVertical_bias="0.71" />
+
+        <TextView
+            android:id="@+id/counterspaces"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:gravity="center"
+            android:text="SPACES AVAILABLE"
+            android:textColor="#000000"
+            android:textSize="20sp" app:layout_constraintBottom_toTopOf="@+id/buttonWed"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/distanceView"
+            app:layout_constraintVertical_bias="0.186" />
+
+        <Button
+            android:id="@+id/buttonSun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S"
+            app:layout_constraintBottom_toTopOf="@+id/displayView"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/buttonMon"
+            app:layout_constraintTop_toBottomOf="@+id/photoView" />
+        <Button
+            android:id="@+id/buttonMon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            app:layout_constraintRight_toLeftOf="@id/buttonTue"
+            app:layout_constraintLeft_toRightOf="@id/buttonSun"
+            app:layout_constraintBottom_toTopOf="@+id/displayView"
+            app:layout_constraintTop_toBottomOf="@+id/photoView"/>
+        <Button
+            android:id="@+id/buttonTue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="T"
+            app:layout_constraintRight_toLeftOf="@id/buttonWed"
+            app:layout_constraintLeft_toRightOf="@id/buttonMon"
+            app:layout_constraintBottom_toTopOf="@+id/displayView"
+            app:layout_constraintTop_toBottomOf="@+id/photoView"/>
+        <Button
+            android:id="@+id/buttonWed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="W"
+            app:layout_constraintRight_toLeftOf="@id/buttonThu"
+            app:layout_constraintLeft_toRightOf="@id/buttonTue"
+            app:layout_constraintBottom_toTopOf="@+id/displayView"
+            app:layout_constraintTop_toBottomOf="@+id/photoView"/>
+        <Button
+            android:id="@+id/buttonThu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="T"
+            app:layout_constraintRight_toLeftOf="@id/buttonFri"
+            app:layout_constraintLeft_toRightOf="@id/buttonWed"
+            app:layout_constraintBottom_toTopOf="@+id/displayView"
+            app:layout_constraintTop_toBottomOf="@+id/photoView"/>
+        <Button
+            android:id="@+id/buttonFri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="F"
+            app:layout_constraintRight_toLeftOf="@id/buttonSat"
+            app:layout_constraintLeft_toRightOf="@id/buttonThu"
+            app:layout_constraintBottom_toTopOf="@+id/displayView"
+            app:layout_constraintTop_toBottomOf="@+id/photoView"/>
+        <Button
+            android:id="@+id/buttonSat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/buttonFri"
+            app:layout_constraintBottom_toTopOf="@+id/displayView"
+            app:layout_constraintTop_toBottomOf="@+id/photoView"/>
+
+        <TextView
+            android:id="@+id/displayView"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:background="#000000"
+            android:gravity="center"
+            android:text="OPENING TIME"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toTopOf="@id/displayView1"
+            app:layout_constraintLeft_toRightOf="@id/displayView2"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/photoView"
+            app:layout_constraintVertical_bias="0.875" />
+        <TextView
+            android:id="@+id/displayView2"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:text="OPENING TIME"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toTopOf="@id/displayView3"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/displayView"
+            app:layout_constraintTop_toBottomOf="@+id/buttonWed" />
+
+        <TextView
+            android:id="@+id/displayView1"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:background="#000000"
+            android:gravity="center"
+            android:text="CLOSING TIME"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toTopOf="@id/buttonGO"
+            app:layout_constraintLeft_toRightOf="@id/displayView3"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonWed"
+            app:layout_constraintVertical_bias="0.851" />
+
+        <TextView
+            android:id="@+id/displayView3"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:background="#EEEEEE"
+            android:gravity="center"
+            android:text="CLOSING TIME"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toTopOf="@id/buttonGO"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/displayView1"
+            app:layout_constraintTop_toBottomOf="@id/displayView2" />
+
+        <Button
+            android:id="@+id/buttonGO"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="84dp"
+            android:background="#000000"
+            android:gravity="center"
+            android:text="GO"
+            android:textColor="#ffffff"
+            app:layout_constraintLeft_toRightOf="parent"
+            app:layout_constraintRight_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonWed" />
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
