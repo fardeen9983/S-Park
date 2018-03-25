@@ -1,8 +1,11 @@
 package com.prototype.hackathon.getparked;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,6 +15,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,8 +32,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -59,7 +66,7 @@ import java.util.List;
 
 
 public class MapActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener
-        , OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks ,GoogleApiClient.OnConnectionFailedListener{
+        , OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
 
 
     //Firebase
@@ -75,6 +82,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     //Map variables
     private GoogleMap mGoogleMap;
     private Marker marker;
+    private List<Marker> markerList;
 
     //API
     private GoogleApiClient googleApiClient;
@@ -89,15 +97,15 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     private ImageView recenter;
     private ImageView details;
 
-    //Location Variable
+    //ParkingSpot Variable
     private double radius;
-    public  Location location;
+    public Location location;
     private LatLng current;
-    private Marker Dest;
-    private List<Marker> markerList;
+    private LatLng dest;
+
     private FusedLocationProviderClient fusedLocationProviderClient;
 
-    //Location requests
+    //ParkingSpot requests
     private LocationRequest locationRequest;
     private int locPriority;
     private final int PRIORITY_BALANCED_POWER_ACCURACY = 2;
@@ -143,6 +151,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         }
     };
     //Miscellaneous
+    private final int ERROR_SERVICES = 9001;
     private Details markerDetails;
     private final String TAG = getClass().getSimpleName();
 
@@ -153,13 +162,13 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         googleApiClient = new GoogleApiClient.Builder(this).addApi(Places.GEO_DATA_API).addApi(LocationServices.API)
                 .addApi(Places.PLACE_DETECTION_API).build();
         locPermission = false;
-        radius=10;
+        radius = 10;
         setUpDisplay();
         locPriority = PRIORITY_BALANCED_POWER_ACCURACY;
         checkPermissions();
     }
 
-    private void hideKeyboard(){
+    private void hideKeyboard() {
         InputMethodManager methodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (methodManager != null) {
             methodManager.hideSoftInputFromWindow(autoCompleteTextView.getWindowToken(), 0);
@@ -176,7 +185,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this,drawerLayout,R.string.drawer_open,R.string.drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -186,11 +195,12 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         searchLayout = findViewById(R.id.search_layout);
         searchLayout.setAlpha(0.65f);
 
-        details =findViewById(R.id.details);
+        details = findViewById(R.id.details);
         details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),DetailsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
+                intent.putExtra("loc",location);
                 startActivity(intent);
             }
         });
@@ -207,7 +217,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     }
 
-    private void autoInit(){
+    private void autoInit() {
         autoCompleteTextView = findViewById(R.id.search_auto);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -236,6 +246,30 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         });
     }
 
+    public boolean isServicesLatest() {
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+        if (available == ConnectionResult.SUCCESS) {
+            //everything's fine
+            return true;
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            //fixable error
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, available, ERROR_SERVICES);
+            dialog.show();
+        } else //no can't do anything
+            Toast.makeText(this, "You can't make Map requests", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private BroadcastReceiver mLocationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            float latitude = intent.getFloatExtra(LocationService.USER_LATITUDE, 0);
+            float longitude = intent.getFloatExtra(LocationService.USER_LONGITUDE, 0);
+            current = new LatLng(latitude,longitude);
+            moveCamera(current,DEFAULT_ZOOM);
+            //do something
+        }
+    };
     private void moveToSearchedAddress(String query) {
         if (query == null)
             return;
@@ -256,9 +290,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         }
 
     }
-    private void getDirections(){
 
-    }
     private void checkPermissions() {
         if (ActivityCompat.checkSelfPermission(this, FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.checkSelfPermission(this, COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -274,7 +306,7 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(toggle.onOptionsItemSelected(item)){
+        if (toggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -303,6 +335,15 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Intent service = new Intent(this, LocationService.class);
+
+        IntentFilter intentLocationServiceFilter = new IntentFilter(LocationService
+                .LOCATION_SERVICE);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(mLocationReceiver, intentLocationServiceFilter);
+        if (isServicesLatest()) {
+            startService(service);
+        }
     }
 
     private void getCurrentLocation() {
@@ -315,10 +356,10 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
                 fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
-                        if(task.isSuccessful()&&task.getResult()!=null){
-                          location = task.getResult();
-                          current = new LatLng(location.getLatitude(),location.getLongitude());
-                          moveCamera(current,DEFAULT_ZOOM);
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            location = task.getResult();
+                            current = new LatLng(location.getLatitude(), location.getLongitude());
+                            moveCamera(current, DEFAULT_ZOOM);
                         }
                     }
                 });
@@ -327,35 +368,35 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
     }
 
 
-    private void moveCamera(LatLng latLng,float zoom){
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+    private void moveCamera(LatLng latLng, float zoom) {
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
-    private void moveCamera(LatLng latLng,float zoom,String desc){
+    private void moveCamera(LatLng latLng, float zoom, String desc) {
         marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(desc));
         markerList.add(marker);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        switch(id){
-            case R.id.nav_account :
-                startActivity(new Intent(getApplicationContext(),AccountActivity.class));
+        switch (id) {
+            case R.id.nav_account:
+                startActivity(new Intent(getApplicationContext(), AccountActivity.class));
                 finish();
                 break;
-            case R.id.nav_settings :
-                startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
+            case R.id.nav_settings:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 
                 break;
-            case R.id.nav_logout :
+            case R.id.nav_logout:
                 auth = FirebaseAuth.getInstance();
-                if(auth.getCurrentUser()!=null) {
+                if (auth.getCurrentUser() != null) {
                     auth.signOut();
                 }
-                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 break;
         }
         return false;
@@ -369,7 +410,8 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        return false;
+        this.marker = marker;
+        return true;
     }
 
     @Override
@@ -394,17 +436,23 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
 
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    protected void onPause() {
+        super.onPause();
+//        if (marker != null) {
+//            dest = new LatLng(marker.getPosition().latitude,marker.getPosition().longitude);
+//            ParkingSpot abc = new ParkingSpot("Random");
+//            abc.setLongitude(dest.longitude);
+//            abc.setLatitude(dest.latitude);
+//            Intent intent = new Intent(this, TrackerService.class);
+//            intent.putExtra("loc", abc);
+//            startService(intent);
+//            marker=null;
+//        }
 
     }
 }

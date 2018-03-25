@@ -3,4 +3,5 @@
     <string name="google_maps_key">AIzaSyDUvGokd_c0QDLCUkCsAgae9AzqbTdxiJE</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
+    <string name="notification_text">Tracking, tap to cancel</string>
 </resources>

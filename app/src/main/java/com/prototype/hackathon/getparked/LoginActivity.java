@@ -1,13 +1,16 @@
 package com.prototype.hackathon.getparked;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,34 +18,51 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private final String TAG = getClass().getSimpleName();
     private EditText Email;
     private EditText Password;
-    private Button Login;
+    private ImageView Login;
     private TextView RegisterUser;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-
+    private UserProfileChangeRequest profileUpdates;
+    private Uri uri;
+    private Uri.Builder builder;
+    private final String URI = "https://api.qrserver.com/v1/create-qr-code/?size=150x150";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login);
         progressDialog = new ProgressDialog(this);
-        Email = findViewById(R.id.emailText);
-        Password = findViewById(R.id.passwordText);
-        RegisterUser = findViewById(R.id.registerView);
-        Login = findViewById(R.id.loginButton);
+        Email = findViewById(R.id.editText);
+        Password = findViewById(R.id.editText2);
+        RegisterUser = findViewById(R.id.textView2);
+        Login = findViewById(R.id.imageView4);
+        builder = new Uri.Builder();
+        profileUpdates = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(builder.build())
+                .build();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser()!=null)
-                    startActivity(new Intent(getApplicationContext(),MapActivity.class));
+                if(firebaseAuth.getCurrentUser()!=null) {
+                    if(firebaseAuth.getCurrentUser().getPhotoUrl()==null){
+                        uri = Uri.parse(URI);
+                        builder = uri.buildUpon();
+                        builder.appendQueryParameter("data",firebaseAuth.getCurrentUser().getUid());
+                        firebaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(builder.build()).build());
+                    }
+                    startActivity(new Intent(getApplicationContext(), MapActivity.class));
+                }
             }
         };
+
         firebaseAuth = FirebaseAuth.getInstance();
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +70,7 @@ public class LoginActivity extends AppCompatActivity {
                 loginUser();
             }
         });
+        firebaseAuth.getCurrentUser();
         RegisterUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"User Authenticated...",Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                     Intent intent = new Intent(LoginActivity.this, MapActivity.class);
+                    Log.v(TAG,"User id " + firebaseAuth.getCurrentUser().getUid());
                     startActivity(intent);
                 }
                 else{
@@ -94,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-    firebaseAuth.addAuthStateListener(authStateListener);
+        firebaseAuth.addAuthStateListener(authStateListener);
+
     }
 }

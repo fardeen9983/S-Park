@@ -24,7 +24,6 @@ public class DetailsLoader extends AsyncTaskLoader<List<SpotDetails>> {
         forceLoad();
     }
 
-
     @Override
     public List<SpotDetails> loadInBackground() {
         List<SpotDetails> spotDetails = new ArrayList<>();

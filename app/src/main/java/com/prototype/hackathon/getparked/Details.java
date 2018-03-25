@@ -164,7 +164,7 @@ public class Details {
     }
     private boolean checkRadius(LatLng latLng){
         float []results ={};
-        //Location.distanceBetween(current.getLatitude(),current.getLongitude(),latLng.latitude,latLng.longitude,results);
+        //ParkingSpot.distanceBetween(current.getLatitude(),current.getLongitude(),latLng.latitude,latLng.longitude,results);
         Log.v(TAG,results.toString()+" sadfsadfsdf");
         return true;
     }

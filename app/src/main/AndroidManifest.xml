@@ -22,8 +22,9 @@
 
         <activity
             android:name=".MapActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".SplashActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,8 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-            android:label="Log In"/>
+        <activity
+            android:name=".LoginActivity"
+            android:label="Log In" />
         <activity
             android:name=".SignupActivity"
             android:parentActivityName=".LoginActivity" />
@@ -44,8 +46,18 @@
             android:name=".SettingsActivity"
             android:label="Settings"
             android:parentActivityName=".MapActivity" />
-        <activity android:name=".DetailsActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".DetailsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <service
+            android:name=".TrackerService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".LocationService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

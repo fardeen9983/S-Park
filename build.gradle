@@ -26,3 +26,13 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+ext {
+    supportLibVersion = "26.1.0"
+    runnerVersion = "1.0.1"
+    rulesVersion = "1.0.1"
+    espressoVersion = "3.0.1"
+    archLifecycleVersion = "1.0.0"
+    archRoomVersion = "1.0.0"
+}

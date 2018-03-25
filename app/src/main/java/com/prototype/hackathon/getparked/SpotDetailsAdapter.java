@@ -32,7 +32,7 @@ public class SpotDetailsAdapter extends ArrayAdapter<SpotDetails> {
         }
         TextView address = root.findViewById(R.id.text2);
         TextView timer = root.findViewById(R.id.timer);
-        TextView counter = root.findViewById(R.id.counter);
+        //TextView counter = root.findViewById(R.id.counter);
         SpotDetails spotDetails = spotDetailsList.get(position);
 
         address.setText(spotDetails.getAddress());
