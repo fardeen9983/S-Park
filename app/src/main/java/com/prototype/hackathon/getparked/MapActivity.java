@@ -175,6 +175,22 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 101:
+                if (resultCode == RESULT_OK) {
+                    ArrayList<ParkingSpot> parkingSpots =(ArrayList<ParkingSpot>)data.getSerializableExtra("requestLoc");
+                    for (ParkingSpot parkingSpot : parkingSpots) {
+                        mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(parkingSpot.getLatitiude(),parkingSpot.getLongitude()))
+                                        .title(parkingSpot.getName()));
+                    }
+                }
+                break;
+        }
+    }
+
     private void setUpDisplay() {
 
         markerList = new ArrayList<>();
@@ -200,8 +216,8 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), DetailsActivity.class);
-                intent.putExtra("loc",location);
-                startActivity(intent);
+                intent.putExtra("loc", location);
+                startActivityForResult(intent, 101);
             }
         });
 
@@ -265,11 +281,12 @@ public class MapActivity extends AppCompatActivity implements NavigationView.OnN
         public void onReceive(Context context, Intent intent) {
             float latitude = intent.getFloatExtra(LocationService.USER_LATITUDE, 0);
             float longitude = intent.getFloatExtra(LocationService.USER_LONGITUDE, 0);
-            current = new LatLng(latitude,longitude);
-            moveCamera(current,DEFAULT_ZOOM);
+            current = new LatLng(latitude, longitude);
+            moveCamera(current, DEFAULT_ZOOM);
             //do something
         }
     };
+
     private void moveToSearchedAddress(String query) {
         if (query == null)
             return;

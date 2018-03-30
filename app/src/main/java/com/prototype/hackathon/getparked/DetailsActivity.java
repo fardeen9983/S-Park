@@ -25,7 +25,7 @@ public class DetailsActivity extends AppCompatActivity {
 
     private ListView listView;
     private ParkingSpot spot;
-    private List<ParkingSpot> parkingSpots;
+    private ArrayList<ParkingSpot> parkingSpots;
     private Location current;
     private TextView emptyList;
     private ParkingSpotAdapter parkingSpotAdapter;
@@ -34,15 +34,10 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (parkingSpots!=null){
-            List<MarkerOptions> markers = new ArrayList<>();
-            for(ParkingSpot spot : parkingSpots){
-                markers.add(new MarkerOptions().position(new LatLng(spot.getLatitiude(),spot.getLongitude()))
-                        .title(spot.getName()));
-            }
-            Intent intent = new Intent(getApplicationContext(),MapActivity.class);
-            intent.putExtra("marker", (Serializable) markers);
-            startActivity(new Intent(getApplicationContext(),MapActivity.class));
+        if(parkingSpots!=null){
+            Intent intent = new Intent();
+            intent.putExtra("requestLoc",parkingSpots);
+            setResult(101,intent);
         }
     }
 
@@ -68,7 +63,9 @@ public class DetailsActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                    Intent intent1 = new Intent(getApplicationContext(),ParkingMoreDetailActivity.class);
+                    intent1.putExtra("selected_spot",parkingSpotAdapter.getItem(position));
+                    startActivity(intent1);
                 }
             });
         }

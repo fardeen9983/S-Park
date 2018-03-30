@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <CustomViews.SegoePrintTextView
-            android:id="@+id/parkingSpaces"
+            android:id="@+id/parkingSpaceMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#EEEEEE"
@@ -21,17 +21,18 @@
             android:textSize="25sp"
             app:layout_constraintRight_toLeftOf="parent"
             app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/addressView"
+            app:layout_constraintBottom_toTopOf="@+id/addressViewMore"
             tools:ignore="MissingConstraints" />
 
         <CustomViews.SegoePrintTextView
-            android:id="@+id/addressView"
+            android:id="@+id/addressViewMore"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="4dp"
             android:background="#58595b"
             android:gravity="center"
             android:textSize="20sp"
+            android:textColor="@color/white"
             android:lines="3"
             android:padding="12dp"
             android:text="Address of parking places shown above"
@@ -39,14 +40,15 @@
             app:layout_constraintBottom_toTopOf="@+id/costView"
             app:layout_constraintLeft_toRightOf="parent"
             app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/parkingSpaces" />
+            app:layout_constraintTop_toBottomOf="@+id/parkingSpaceMore" />
 
             <CustomViews.SegoePrintTextView
                 android:id="@+id/costView"
-                app:layout_constraintRight_toLeftOf="@+id/RdisplayView"
+                android:textColor="@color/white"
+                app:layout_constraintRight_toLeftOf="@+id/RdisplayViewMore"
                 app:layout_constraintLeft_toRightOf="@id/rupeeView"
                 app:layout_constraintBottom_toTopOf="@+id/distanceView"
-                app:layout_constraintTop_toBottomOf="@+id/addressView"
+                app:layout_constraintTop_toBottomOf="@+id/addressViewMore"
                 android:gravity="center"
                 android:layout_width="215dp"
                 android:layout_height="30dp"
@@ -59,6 +61,7 @@
                 tools:layout_editor_absoluteY="80dp" />
 
         <CustomViews.SegoePrintTextView
+            android:textColor="@color/white"
             android:id="@+id/distanceView"
             android:layout_width="215dp"
             android:layout_height="30dp"
@@ -69,7 +72,7 @@
             android:textStyle="italic"
             app:layout_constraintBottom_toTopOf="@+id/image"
             app:layout_constraintLeft_toRightOf="@id/locationView"
-            app:layout_constraintRight_toLeftOf="@id/DdisplayView"
+            app:layout_constraintRight_toLeftOf="@id/DdisplayViewMore"
             app:layout_constraintTop_toBottomOf="@+id/costView" />
 
             <ImageView
@@ -80,31 +83,33 @@
                 app:layout_constraintRight_toLeftOf="@id/costView"
                 app:layout_constraintLeft_toRightOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/locationView"
-                app:layout_constraintTop_toBottomOf="@id/addressView" />
+                app:layout_constraintTop_toBottomOf="@id/addressViewMore" />
 
             <TextView
+                android:textColor="@color/white"
                 android:gravity="center"
-                android:id="@+id/RdisplayView"
+                android:id="@+id/RdisplayViewMore"
                 android:layout_width="102dp"
                 android:layout_height="32dp"
                 android:background="#58595b"
                 android:text="Rs 50/Hr"
                 app:layout_constraintRight_toLeftOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/costView"
-                app:layout_constraintBottom_toTopOf="@+id/DdisplayView"
-                app:layout_constraintTop_toBottomOf="@+id/addressView" />
+                app:layout_constraintBottom_toTopOf="@+id/DdisplayViewMore"
+                app:layout_constraintTop_toBottomOf="@+id/addressViewMore" />
 
             <TextView
-                android:id="@+id/DdisplayView"
+                android:id="@+id/DdisplayViewMore"
                 android:gravity="center"
                 android:layout_width="100dp"
                 android:layout_height="27dp"
                 android:background="#58595b"
                 android:text="10 kms"
+                android:textColor="@color/white"
                 app:layout_constraintRight_toLeftOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/distanceView"
                 app:layout_constraintBottom_toTopOf="@+id/image"
-                app:layout_constraintTop_toBottomOf="@+id/RdisplayView" />
+                app:layout_constraintTop_toBottomOf="@+id/RdisplayViewMore" />
 
             <ImageView
                 android:id="@+id/locationView"
@@ -120,7 +125,6 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:text="IMAGE"
                 android:textColor="#000000"
                 android:gravity="center"
                 app:layout_constraintRight_toLeftOf="parent"
@@ -130,7 +134,7 @@
 
         <ImageView
             android:id="@+id/photoView"
-            android:layout_width="407dp"
+            android:layout_width="match_parent"
             android:layout_height="252dp"
             android:background="#EEEEEE"
             android:src="@drawable/back_circle"
@@ -226,6 +230,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="S"
+            android:gravity=""
             app:layout_constraintRight_toLeftOf="parent"
             app:layout_constraintLeft_toRightOf="@id/buttonFri"
             app:layout_constraintBottom_toTopOf="@+id/displayView"

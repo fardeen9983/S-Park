@@ -22,6 +22,7 @@
 
         <activity
             android:name=".MapActivity"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".SplashActivity"
@@ -48,6 +49,7 @@
             android:parentActivityName=".MapActivity" />
         <activity
             android:name=".DetailsActivity"
+            android:parentActivityName=".MapActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <service
@@ -59,7 +61,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ParkingMoreDetailActivity"></activity>
+        <activity android:name=".ParkingMoreDetailActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

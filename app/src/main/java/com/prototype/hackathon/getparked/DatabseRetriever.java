@@ -20,22 +20,22 @@ import java.util.List;
 
 public class DatabseRetriever {
 
-    private  DatabaseReference dbRef;
-    private  FirebaseDatabase fireDB;
-    public  List<ParkingSpot> locList;
+    private DatabaseReference dbRef;
+    private FirebaseDatabase fireDB;
+    public List<ParkingSpot> locList;
     private Iterable<DataSnapshot> pincode;
     private HashMap<Integer, Sensor> sensorHashMap;
-    private  ParkingSpot parkingSpot;
+    private ParkingSpot parkingSpot;
     private Context context;
-    private  int pinc;
+    private int pinc;
 
     public DatabseRetriever(int pin, float rad, Context context) {
         pinc = pin;
-        this.context=context;
+        this.context = context;
         createList();
     }
 
-    public  void createList() {
+    public void createList() {
         locList = new ArrayList<>();
 
         fireDB = FirebaseDatabase.getInstance();
@@ -66,12 +66,18 @@ public class DatabseRetriever {
                 String key = temp.getKey().trim();
                 if (key.equals("city"))
                     continue;
-                parkingSpot.setName((String) temp.child("name").getValue());
-                //parkingSpot.setAddress((String)temp.child("address").getValue());
-                parkingSpot.setCost((double) temp.child("cost").getValue());
-                parkingSpot.setLatitiude((double) temp.child("lat").getValue());
-                parkingSpot.setLongitude((double) temp.child("long").getValue());
-                parkingSpot.setPincode(pinc);
+                //if (temp.child("name").getValue() != null)
+                    parkingSpot.setName((String) temp.child("name").getValue());
+                //if (temp.child("address").getValue() != null)
+                    parkingSpot.setAddress((String) temp.child("address").getValue());
+               // if (temp.child("cost").getValue() != null)
+                    parkingSpot.setCost((double) temp.child("cost").getValue());
+                //if (temp.child("lat").getValue() != null)
+                    parkingSpot.setLatitiude((double) temp.child("lat").getValue());
+                //if (temp.child("long").getValue() != null)
+                    parkingSpot.setLongitude((double) temp.child("long").getValue());
+
+                    parkingSpot.setPincode(pinc);
 
                 DataSnapshot sensor = temp.child("sensor");
                 DataSnapshot timer = temp.child("time");
@@ -95,8 +101,8 @@ public class DatabseRetriever {
                 }
 
                 sensorHashMap = new HashMap<>();
-                for (int i = 0; i<parkingSpot.getSensorCount();i++){
-                    sensorHashMap.put(i+1,new Sensor(sensorValue.get(i),timeValue.get(i)));
+                for (int i = 0; i < parkingSpot.getSensorCount(); i++) {
+                    sensorHashMap.put(i + 1, new Sensor(sensorValue.get(i), timeValue.get(i)));
                 }
                 parkingSpot.setSensor(sensorHashMap);
                 list.add(parkingSpot);
@@ -108,7 +114,7 @@ public class DatabseRetriever {
         protected void onPostExecute(ArrayList<ParkingSpot> parkingSpots) {
             super.onPostExecute(parkingSpots);
             Intent intent = new Intent(context, DetailsActivity.class);
-            intent.putExtra("list",parkingSpots);
+            intent.putExtra("list", parkingSpots);
             context.startActivity(intent);
         }
     }
